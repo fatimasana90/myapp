@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h3>سفارش شماره {{ order.id }}</h3>
+
+    <p><strong>کاربر:</strong> {{ order.user.email if order.user else "مهمان" }}</p>
+    <p><strong>تاریخ ثبت:</strong> {{ order.created_at.strftime('%Y-%m-%d') }}</p>
+    <p><strong>مبلغ کل:</strong> {{ order.total_price | int }} تومان</p>
+    <p><strong>وضعیت فعلی:</strong> {{ order.status }}</p>
+
+    <form method="post" class="my-3">
+        <label>تغییر وضعیت:</label>
+        <select name="status" class="form-select mb-2">
+            <option value="در انتظار پرداخت">در انتظار پرداخت</option>
+            <option value="پرداخت شده">پرداخت شده</option>
+            <option value="ارسال شده">ارسال شده</option>
+            <option value="لغو شده">لغو شده</option>
+        </select>
+        <button type="submit" class="btn btn-primary">ذخیره تغییر</button>
+    </form>
+
+    <h5 class="mt-4">محصولات سفارش:</h5>
+    <table class="table table-bordered text-center">
+        <thead class="table-light">
+            <tr>
+                <th>محصول</th>
+                <th>تعداد</th>
+                <th>قیمت واحد</th>
+                <th>جمع</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price | int }} تومان</td>
+                <td>{{ item.price * item.quantity | int }} تومان</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

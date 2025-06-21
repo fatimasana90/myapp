@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>پرداخت | برآلین</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/font-face.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Vazir, sans-serif;
+      background-color: #f8f9fa;
+    }
+    header {
+      background-color: #343a40;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>💳 صفحه پرداخت</header>
+
+<div class="container mt-3 pb-5">
+  <form id="checkout-form">
+    <div class="mb-3">
+      <label for="name" class="form-label">نام و نام خانوادگی</label>
+      <input type="text" class="form-control" id="name" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="phone" class="form-label">شماره تماس</label>
+      <input type="tel" class="form-control" id="phone" name="phone" required pattern="09[0-9]{9}" placeholder="مثلاً 09123456789" />
+    </div>
+
+    <div class="mb-3">
+      <label for="address" class="form-label">آدرس تحویل سفارش</label>
+      <textarea class="form-control" id="address" rows="3" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">روش پرداخت</label>
+      <select class="form-select" id="payment-method" required>
+        <option value="">انتخاب کنید</option>
+        <option value="online">پرداخت آنلاین</option>
+        <option value="cash">پرداخت نقدی در محل</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">تایید و ثبت سفارش</button>
+  </form>
+</div>
+
+<footer class="fixed-bottom bg-white border-top py-2 shadow-sm">
+  <div class="container d-flex justify-content-around">
+    <a href="{{ url_for('main.mobile_home') }}" class="text-decoration-none text-center text-dark flex-fill">
+      <i class="bi bi-house-door-fill fs-4"></i><br /><small>خانه</small>
+    </a>
+    <a href="{{ url_for('main.mobile_cart') }}" class="text-decoration-none text-center text-dark flex-fill">
+      <i class="bi bi-cart-fill fs-4"></i><br /><small>سبد خرید</small>
+    </a>
+    <a href="{{ url_for('main.mobile_checkout') }}" class="text-decoration-none text-center text-dark flex-fill">
+      <i class="bi bi-credit-card-2-front-fill fs-4"></i><br /><small>پرداخت</small>
+    </a>
+    <a href="{{ url_for('main.mobile_profile') }}" class="text-decoration-none text-center text-dark flex-fill">
+      <i class="bi bi-person-fill fs-4"></i><br /><small>پروفایل</small>
+    </a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("checkout-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const paymentMethod = document.getElementById("payment-method").value;
+
+    if (!name || !phone || !address || !paymentMethod) {
+      alert("لطفا همه فیلدها را کامل کنید.");
+      return;
+    }
+
+    // اطلاعات سفارش از localStorage
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+      alert("سبد خرید شما خالی است.");
+      return;
+    }
+
+    // می‌تونید اینجا درخواست ارسال سفارش به سرور رو اضافه کنید
+    // برای شروع فقط یک پیام تایید نشان می‌دیم
+
+    alert("سفارش شما ثبت شد. ممنون از خرید شما!");
+
+    // پاک کردن سبد خرید پس از ثبت سفارش
+    localStorage.removeItem("cart");
+
+    // ریدایرکت به صفحه خانه یا صفحه پروفایل
+    window.location.href = "{{ url_for('main.mobile_home') }}";
+  });
+</script>
+
+</body>
+</html>
+

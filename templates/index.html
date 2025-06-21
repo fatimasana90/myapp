@@ -1,0 +1,131 @@
+﻿{% extends "base.html" %}
+
+{% block title %}خانه | برآلین{% endblock %}
+
+{% block content %}
+<!-- اسلایدر بنر -->
+<div class="banner-container mb-4">
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="30000">
+    <!-- دکمه‌های انتخاب مستقیم اسلاید -->
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
+    </div>
+
+    <!-- محتوای اسلایدها -->
+    <div class="carousel-inner rounded shadow-sm">
+      <div class="carousel-item active">
+        <img src="{{ url_for('static', filename='images/product1.jpg') }}" class="d-block w-100 banner-img" alt="محصول 1" />
+      </div>
+      <div class="carousel-item">
+        <img src="{{ url_for('static', filename='images/product2.jpg') }}" class="d-block w-100 banner-img" alt="محصول 2" />
+      </div>
+      <div class="carousel-item">
+        <img src="{{ url_for('static', filename='images/product3.jpg') }}" class="d-block w-100 banner-img" alt="محصول 3" />
+      </div>
+    </div>
+
+    <!-- دکمه‌های قبلی / بعدی -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">قبلی</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">بعدی</span>
+    </button>
+  </div>
+</div>
+
+<!-- جدیدترین محصولات -->
+<section>
+  <h2 class="text-center mb-4">جدیدترین محصولات</h2>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4" id="product-list" data-total-count="{{ total_count }}">
+    {% for product in products %}
+    <div class="col">
+      <div class="card h-100 text-center shadow-sm">
+        <img
+          src="{{ url_for('static', filename='images/' ~ product.image_url) if product.image_url else url_for('static', filename='images/sample1.jpg') }}"
+          alt="{{ product.name }}"
+          class="card-img-top"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="text-muted">{{ product.price }} تومان</p>
+          <button
+            class="btn btn-warning w-100"
+            onclick="addToCart('{{ product.id }}', '{{ product.name }}', this, {{ product.price }})"
+          >
+            🛒 افزودن به سبد خرید
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if not show_all and total_count > products|length %}
+  <div class="text-center mt-4">
+    {% if not show_all and total_count > 4 %}
+      <a href="{{ url_for('main.home') }}?show_all=true" class="btn btn-success px-4">
+        مشاهده بیشتر
+      </a>
+    {% elif show_all %}
+      <a href="{{ url_for('main.home') }}" class="btn btn-secondary px-4">
+        نمایش کمتر
+      </a>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+
+  <!-- بنر دسته‌بندی -->
+  <section class="category-banner my-5 text-center">
+    <h2>دسته‌بندی محصولات</h2>
+    <img src="{{ url_for('static', filename='images/cat_food.jpg') }}" alt="بنر دسته‌بندی" class="img-fluid rounded shadow-sm" />
+  </section>
+
+  <!-- دسته‌بندی‌ها -->
+  <section class="category-section my-5">
+    <h2 class="mb-4">دسته‌بندی‌ها</h2>
+    <div class="d-flex justify-content-around flex-wrap gap-4">
+      <div class="category-item text-center" style="width: 180px;">
+        <img src="{{ url_for('static', filename='images/cat_food.jpg') }}" alt="مواد غذایی" class="img-fluid rounded" />
+        <p class="mt-2 fw-semibold">مواد غذایی</p>
+      </div>
+      <div class="category-item text-center" style="width: 180px;">
+        <img src="{{ url_for('static', filename='images/cat_essentials.jpg') }}" alt="کالای اساسی" class="img-fluid rounded" />
+        <p class="mt-2 fw-semibold">کالای اساسی</p>
+      </div>
+      <div class="category-item text-center" style="width: 180px;">
+        <img src="{{ url_for('static', filename='images/cat_tobacco.jpg') }}" alt="دخانیات و آتش‌زا" class="img-fluid rounded" />
+        <p class="mt-2 fw-semibold">دخانیات و آتش‌زا</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- سبد خرید -->
+  <section class="cart my-5">
+    <h2 class="text-center mb-3">🛒 سبد خرید</h2>
+    <div id="cart-items" class="mb-2"></div>
+    <p id="total-price" class="fw-bold">مبلغ کل: ۰ تومان</p>
+    <button onclick="checkout()" type="button" class="btn btn-primary w-100">پرداخت</button>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

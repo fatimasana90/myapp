@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>برآلین | فروشگاه کافه و رستوران</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+
+  <!-- آیکون‌ها -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- فونت فارسی Vazir -->
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/font-face.css" rel="stylesheet" />
+
+  <!-- manifest و آیکون موبایل -->
+  <link rel="manifest" href="{{ url_for('static', filename='manifest_mobile.json') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='icons/icon-192-v2.png') }}" sizes="192x192" type="image/png" />
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192-v2.png') }}" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Beralin" />
+
+  <style>
+    body {
+      font-family: Vazir, sans-serif;
+      background-color: #f8f9fa;
+      margin-bottom: 70px; /* فضای مناسب برای نوار پایین */
+    }
+
+    header {
+      background-color: #343a40;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    /* نوار بالای قرمز رنگ */
+    .top-bar-red {
+      background-color: #d32f2f;
+      color: white;
+      text-align: center;
+      font-weight: 700;
+      padding: 0.3rem 0;
+      font-size: 0.9rem;
+    }
+
+    /* نوار تبلیغات باریک متحرک */
+    .promo-banner {
+      background: linear-gradient(90deg, #ffcc00, #ff3d00, #ffcc00);
+      color: #000;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+      height: 30px;
+      font-weight: bold;
+    }
+    .promo-banner span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll-left 12s linear infinite;
+      line-height: 30px;
+    }
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    /* نوار بالای جستجو و زنگوله */
+    .search-bar {
+      background-color: #ffffff;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .search-bar input[type="text"] {
+      flex-grow: 1;
+      border-radius: 25px;
+      border: 1.5px solid #ccc;
+      padding: 6px 15px;
+      font-size: 0.9rem;
+    }
+    .search-bar button, .search-bar .notification {
+      background-color: transparent;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: #d32f2f;
+      position: relative;
+    }
+    /* نشون دادن عدد نوتیفیکیشن */
+    .search-bar .notification::after {
+      content: "3";
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #ff3d00;
+      color: white;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 18px;
+      font-weight: bold;
+    }
+
+    /* دسته‌بندی‌ها - آیکون‌های دایره‌ای */
+    .categories {
+      background: #fff;
+      padding: 10px 0;
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      border-bottom: 1px solid #ddd;
+      scroll-behavior: smooth;
+    }
+    .category-item {
+      flex: 0 0 auto;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #333;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .category-item:hover {
+      transform: scale(1.1);
+      color: #d32f2f;
+    }
+    .category-item img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 5px;
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    .category-item:hover img {
+      border-color: #d32f2f;
+    }
+
+    /* انتخاب استان و شهر */
+    .location-select {
+      background: #fff;
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgb(0 0 0 / 0.1);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    .location-select select {
+      flex-grow: 1;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: 1.3px solid #ccc;
+    }
+    .location-select i {
+      color: #d32f2f;
+      font-size: 1.5rem;
+    }
+
+    /* کارت‌های محصول موجود */
+    .product-card {
+      border-radius: 16px;
+      background-color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      transition: box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+      box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+    }
+    .product-img {
+      border-radius: 12px;
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    /* نوار پایین ثابت */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.4rem 0;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    .bottom-nav a {
+      text-decoration: none;
+      color: #666;
+      flex-grow: 1;
+      text-align: center;
+      font-size: 0.75rem;
+    }
+    .bottom-nav i {
+      font-size: 1.3rem;
+    }
+    .bottom-nav a.active, .bottom-nav a:hover {
+      color: #d32f2f;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>🛒 فروشگاه برآلین</header>
+
+<!-- نوار بالای قرمز -->
+<div class="top-bar-red">
+  بهترین پیشنهادها و تخفیف‌های روز را از دست ندهید!
+</div>
+
+<!-- بنر تبلیغات متحرک -->
+<div class="promo-banner">
+  <span>🔥 حراج ویژه برنج طارم | مایع ظرفشویی اصل ۴ لیتری | ارسال رایگان بالای ۵۰۰ هزار تومان 🔥</span>
+</div>
+
+<!-- نوار جستجو و زنگوله -->
+<div class="search-bar container">
+  <input type="text" placeholder="جستجوی محصولات..." />
+  <button title="جستجو"><i class="bi bi-search"></i></button>
+  <button class="notification" title="اعلان‌ها"><i class="bi bi-bell"></i></button>
+</div>
+
+<!-- انتخاب استان و شهر -->
+<div class="location-select container">
+  <i class="bi bi-geo-alt-fill"></i>
+  <select aria-label="انتخاب استان">
+    <option selected>استان</option>
+    <option>تهران</option>
+    <option>اصفهان</option>
+    <option>مشهد</option>
+    <option>تبریز</option>
+  </select>
+  <select aria-label="انتخاب شهر">
+    <option selected>شهر</option>
+    <option>تهران</option>
+    <option>کرج</option>
+    <option>قم</option>
+    <option>شیراز</option>
+  </select>
+</div>
+
+<!-- دسته‌بندی‌ها -->
+<div class="categories container">
+  <div class="category-item" title="خوراکی">
+    <img src="/static/icons/food.png" alt="خوراکی" />
+    خوراکی
+  </div>
+  <div class="category-item" title="پلاستیکی">
+    <img src="/static/icons/plastic.png" alt="پلاستیکی" />
+    پلاستیکی
+  </div>
+  <div class="category-item" title="شوینده">
+    <img src="/static/icons/detergent.png" alt="شوینده" />
+    شوینده
+  </div>
+  <div class="category-item" title="نوشیدنی">
+    <img src="/static/icons/drinks.png" alt="نوشیدنی" />
+    نوشیدنی
+  </div>
+  <div class="category-item" title="کالاهای خانگی">
+    <img src="/static/icons/home_goods.png" alt="کالاهای خانگی" />
+    خانگی
+  </div>
+</div>
+
+<!-- محصولات -->
+<div class="container mt-3 pb-5">
+
+  <!-- محصول ۱ -->
+  <a href="{{ url_for('main.mobile_product_detail', product_id=1) }}" class="text-decoration-none text-dark">
+    <div class="product-card">
+      <img src="/static/images/rice.jpg" class="product-img" alt="برنج" />
+      <div class="mt-2">
+        <h6>برنج طارم ۱۰ کیلویی</h6>
+        <p class="text-muted small">خوراکی</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="text-success fw-bold">۶۵۰,۰۰۰ تومان</span>
+          <button
+            class="btn btn-sm btn-outline-success"
+            onclick="event.preventDefault(); addToCart(1, 'برنج طارم', this, 650000)"
+          >
+            افزودن
+          </button>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <!-- محصول ۲ -->
+  <a href="{{ url_for('main.mobile_product_detail', product_id=2) }}" class="text-decoration-none text-dark">
+    <div class="product-card">
+      <img src="/static/images/liquid.jpg" class="product-img" alt="مایع ظرفشویی" />
+      <div class="mt-2">
+        <h6>مایع ظرفشویی ۴ لیتری</h6>
+        <p class="text-muted small">شوینده</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="text-success fw-bold">۹۵,۰۰۰ تومان</span>
+          <button
+            class="btn btn-sm btn-outline-success"
+            onclick="event.preventDefault(); addToCart(2, 'مایع ظرفشویی', this, 95000)"
+          >
+            افزودن
+          </button>
+        </div>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<!-- منوی پایین موبایل -->
+<footer class="bottom-nav">
+  <a href="{{ url_for('main.mobile_home') }}" class="active">
+    <i class="bi bi-house-door-fill"></i><br />
+    خانه
+  </a>
+  <a href="{{ url_for('main.mobile_cart') }}">
+    <i class="bi bi-cart-fill"></i><br />
+    سبد خرید
+  </a>
+  <a href="{{ url_for('main.mobile_checkout') }}">
+    <i class="bi bi-credit-card-2-front-fill"></i><br />
+    پرداخت
+  </a>
+  <a href="{{ url_for('main.mobile_profile') }}">
+    <i class="bi bi-person-fill"></i><br />
+    پروفایل
+  </a>
+</footer>
+
+<!-- اسکریپت بوت‌استرپ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- اسکریپت سبد خرید -->
+<script>
+  function addToCart(id, name, btn, price) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const itemIndex = cart.findIndex((item) => item.id === id);
+    if (itemIndex !== -1) {
+      cart[itemIndex].quantity += 1;
+    } else {
+      cart.push({ id, name, price, quantity: 1 });
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    btn.textContent = "✅ اضافه شد";
+    setTimeout(() => {
+      btn.textContent = "افزودن";
+    }, 1500);
+  }
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/static/sw.js").then(() => {
+      console.log("✅ Service Worker ثبت شد");
+    });
+  }
+</script>
+
+</body>
+</html>
+
+
+
+

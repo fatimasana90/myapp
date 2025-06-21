@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}جزئیات مطلب{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="card">
+        <img src="{{ blog.image_url }}" class="card-img-top" alt="{{ blog.title }}">
+        <div class="card-body">
+            <h2 class="card-title">{{ blog.title }}</h2>
+            <p class="text-muted">منتشر شده در {{ blog.published_date.strftime('%Y-%m-%d') }}</p>
+            <p class="card-text">{{ blog.content }}</p>
+            <a href="{{ url_for('main.blog_list') }}" class="btn btn-primary">بازگشت به لیست مطالب</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

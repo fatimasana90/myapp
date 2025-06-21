@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-4 text-center">🧾 جزئیات سفارش شماره {{ order.id }}</h3>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>وضعیت سفارش:</strong> <span class="text-primary fw-bold">{{ order.status }}</span></p>
+                    <p><strong>تاریخ ثبت:</strong> {{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>مبلغ کل:</strong> <span class="fw-bold">{{ "{:,.0f}".format(order.total_price) }} تومان</span></p>
+                    {% if order.customer_name %}
+                    <p><strong>خریدار:</strong> {{ order.customer_name }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h5 class="mt-4 mb-3">📦 محصولات این سفارش:</h5>
+
+            {% if order.items %}
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>نام محصول</th>
+                            <th>تعداد</th>
+                            <th>قیمت واحد</th>
+                            <th>جمع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ "{:,.0f}".format(item.price) }} تومان</td>
+                            <td>{{ "{:,.0f}".format(item.price * item.quantity) }} تومان</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted">هیچ کالایی در این سفارش ثبت نشده است.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

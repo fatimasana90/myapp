@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>ثبت‌نام</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            direction: rtl;
+            padding: 2rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input {
+            padding: 0.5rem;
+            width: 300px;
+            margin-bottom: 0.5rem;
+        }
+        .error {
+            color: red;
+            font-size: 0.9rem;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>فرم ثبت‌نام</h1>
+
+    <form method="POST" action="{{ url_for('main.register') }}">
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32, class="form-input") }}<br>
+            {% for error in form.email.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32, id="password", class="form-input") }}<br>
+            {% for error in form.password.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.confirm.label }}<br>
+            {{ form.confirm(size=32, id="confirm", class="form-input") }}<br>
+            {% for error in form.confirm.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>{{ form.submit(id="submitBtn", class="btn", disabled=true) }}</p>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const password = document.getElementById("password");
+            const confirm = document.getElementById("confirm");
+            const submitBtn = document.getElementById("submitBtn");
+
+            function checkPasswords() {
+                if (password.value && confirm.value && password.value === confirm.value) {
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.disabled = true;
+                }
+            }
+
+            if (password && confirm && submitBtn) {
+                password.addEventListener("input", checkPasswords);
+                confirm.addEventListener("input", checkPasswords);
+            }
+        });
+    </script>
+</body>
+</html>
+

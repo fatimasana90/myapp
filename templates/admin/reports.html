@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">گزارش سفارش‌ها</h2>
+
+    <form method="post" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label">از تاریخ</label>
+            <input type="date" name="start_date" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">تا تاریخ</label>
+            <input type="date" name="end_date" class="form-control" required>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">نمایش گزارش</button>
+        </div>
+    </form>
+
+    {% if orders %}
+    <table class="table table-bordered text-center">
+        <thead class="table-light">
+            <tr>
+                <th>کد سفارش</th>
+                <th>کاربر</th>
+                <th>تاریخ</th>
+                <th>مبلغ کل</th>
+                <th>وضعیت</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.user.email if order.user else 'مهمان' }}</td>
+                <td>{{ order.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>{{ order.total_price | int }} تومان</td>
+                <td>{{ order.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% elif orders is not none %}
+    <p class="text-center text-danger">سفارشی در بازه انتخابی یافت نشد.</p>
+    {% endif %}
+</div>
+{% endblock %}

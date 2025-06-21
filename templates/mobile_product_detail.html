@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>جزئیات محصول</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/font-face.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: Vazir, sans-serif;
+      background-color: #f8f9fa;
+      padding-bottom: 80px;
+    }
+    .product-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .btn-buy {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: #fff;
+      padding: 1rem;
+      box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-3">
+  <img src="/static/images/rice.jpg" class="product-img" alt="تصویر محصول" />
+
+  <h4 class="mt-3" id="productName">برنج طارم ۱۰ کیلویی</h4>
+  <p class="text-muted" id="productCategory">دسته‌بندی: خوراکی</p>
+  <p id="productDescription">توضیحاتی درباره محصول اینجا قرار می‌گیرد.</p>
+
+  <h5 class="text-success fw-bold" id="productPrice">۶۵۰,۰۰۰ تومان</h5>
+</div>
+
+<div id="toast" class="position-fixed bottom-0 start-50 translate-middle-x mb-4 px-4 py-2 bg-success text-white rounded shadow d-none" style="z-index: 9999;">
+  🛒 به سبد خرید اضافه شد
+</div>
+
+<div class="btn-buy text-center">
+  <button class="btn btn-success w-100 mb-2"
+    onclick="addToCart(1, 'برنج طارم ۱۰ کیلویی', this, 650000)">
+    افزودن به سبد خرید
+  </button>
+
+  <div id="afterAddOptions" class="d-none">
+    <a href="{{ url_for('main.mobile_home') }}" class="btn btn-outline-primary w-100 mb-2">
+      🏠 بازگشت به خانه
+    </a>
+    <a href="{{ url_for('main.mobile_checkout') }}" class="btn btn-primary w-100">
+      💳 رفتن به پرداخت
+    </a>
+  </div>
+</div>
+
+<script>
+function addToCart(id, name, btn, price) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const index = cart.findIndex(item => item.id === id);
+  if (index !== -1) {
+    cart[index].quantity += 1;
+  } else {
+    cart.push({ id, name, price, quantity: 1 });
+  }
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  btn.textContent = "✅ اضافه شد";
+  btn.disabled = true;
+
+  document.getElementById("afterAddOptions").classList.remove("d-none");
+
+  const toast = document.getElementById("toast");
+  toast.classList.remove("d-none");
+  clearTimeout(window.toastTimeout);
+  window.toastTimeout = setTimeout(() => {
+    toast.classList.add("d-none");
+  }, 2000);
+}
+
+</script>
+
+
+
+</body>
+</html>
+

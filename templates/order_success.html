@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2>✅ سفارش با موفقیت ثبت شد</h2>
+        <p>شماره سفارش شما: {{ order.id }}</p>
+        <p>مشتری: {{ order.customer_name }}</p>
+        <p>مبلغ پرداختی: {{ order.total_price | int }} تومان</p>
+        <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">بازگشت به صفحه اصلی</a>
+    </div>
+{% endblock %}

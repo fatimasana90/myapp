@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>سبد خرید - برآلین</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+
+<div class="container py-4">
+  <h2 class="mb-4 text-center">سبد خرید شما</h2>
+
+  <div id="cart-items" class="list-group mb-3">
+    <!-- آیتم‌های سبد خرید با جاوااسکریپت اضافه میشن -->
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 id="total-price">مبلغ کل: ۰ تومان</h5>
+    <button onclick="checkout()" class="btn btn-success">پرداخت</button>
+  </div>
+
+  <div class="text-center">
+    <a href="{{ url_for('main.mobile_home') }}" class="btn btn-secondary">بازگشت به صفحه اصلی</a>
+  </div>
+</div>
+
+<script>
+  // همین کدی که قبلاً برای مدیریت سبد خرید داشتی رو اینجا بذار
+  // تا آیتم‌ها رو از localStorage بیاره و نمایش بده
+  document.addEventListener("DOMContentLoaded", () => {
+    function showCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartItemsContainer = document.getElementById("cart-items");
+      const totalPriceElem = document.getElementById("total-price");
+
+      cartItemsContainer.innerHTML = "";
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = "<p class='text-center text-muted'>سبد خرید خالی است.</p>";
+        totalPriceElem.textContent = "مبلغ کل: ۰ تومان";
+        return;
+      }
+
+      let totalPrice = 0;
+      cart.forEach(item => {
+        totalPrice += item.price * item.quantity;
+        const div = document.createElement("div");
+        div.className = "list-group-item d-flex justify-content-between align-items-center";
+        div.innerHTML = `
+          <div>${item.name} (تعداد: ${item.quantity})</div>
+          <div>${(item.price * item.quantity).toLocaleString()} تومان</div>
+        `;
+        cartItemsContainer.appendChild(div);
+      });
+
+      totalPriceElem.textContent = `مبلغ کل: ${totalPrice.toLocaleString()} تومان`;
+    }
+
+    window.checkout = function () {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.length === 0) {
+        alert("سبد خرید خالی است!");
+        return;
+      }
+      // اینجا می‌تونیم ریدایرکت به صفحه پرداخت یا ارسال به سرور داشته باشیم
+      window.location.href = "{{ url_for('main.mobile_checkout') }}";
+    };
+
+    showCart();
+  });
+</script>
+
+</body>
+</html>
+
+

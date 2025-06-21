@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>افزودن محصول - برآلین</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- هدر -->
+    <header class="header">
+        <div class="menu-icon" onclick="history.back()">←</div>
+        <div style="flex-grow: 1; text-align: center;">افزودن محصول جدید</div>
+        <div class="cart-icon">🛒</div>
+    </header>
+
+    <main style="padding: 20px; background-color: #fff; min-height: 80vh;">
+        <h2 style="text-align:center;">افزودن محصول</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul style="color: green; text-align: center;">
+                    {% for msg in messages %}
+                        <li>{{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div style="margin-bottom: 15px;">
+                {{ form.name.label }}<br>
+                {{ form.name(class_="form-input") }}
+                {% if form.name.errors %}
+                    <span style="color:red;">{{ form.name.errors[0] }}</span>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                {{ form.price.label }}<br>
+                {{ form.price(class_="form-input") }}
+                {% if form.price.errors %}
+                    <span style="color:red;">{{ form.price.errors[0] }}</span>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                {{ form.stock.label }}<br>
+                {{ form.stock(class_="form-input") }}
+                {% if form.stock.errors %}
+                    <span style="color:red;">{{ form.stock.errors[0] }}</span>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                {{ form.category.label }}<br>
+                {{ form.category(class_="form-input") }}
+                {% if form.category.errors %}
+                    <span style="color:red;">{{ form.category.errors[0] }}</span>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                {{ form.image.label }}<br>
+                {{ form.image(class_="form-input") }}
+                {% if form.image.errors %}
+                    <span style="color:red;">{{ form.image.errors[0] }}</span>
+                {% endif %}
+            </div>
+
+            <div style="text-align: center;">
+                {{ form.submit(class_="btn-primary") }}
+            </div>
+        </form>
+    </main>
+
+    <!-- فوتر -->
+    <footer class="categories">
+        <a href="#">مواد غذایی</a>
+        <a href="#">مواد پروتئینی</a>
+        <a href="#">پلاستیک و پت</a>
+    </footer>
+
+    <style>
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+
+        .categories {
+            padding: 15px;
+            text-align: center;
+            background: #f0f0f0;
+            border-top: 1px solid #ccc;
+        }
+
+        .categories a {
+            margin: 0 10px;
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .categories a:hover {
+            text-decoration: underline;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #eee;
+            font-size: 18px;
+        }
+
+        .menu-icon, .cart-icon {
+            cursor: pointer;
+        }
+    </style>
+
+</body>
+</html>
+
+
+

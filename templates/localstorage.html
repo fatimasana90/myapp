@@ -1,0 +1,33 @@
+// ذخیره اطلاعات سبد خرید در localStorage
+function addToCart(id, name, price) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let item = cart.find(i => i.id === id);
+    if (item) item.quantity++;
+    else cart.push({ id, name, price, quantity: 1 });
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`محصول "${name}" به سبد خرید اضافه شد.`);
+}
+
+// نمایش سبد خرید در صفحه سبد خرید
+function showCart() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cartItemsContainer = document.getElementById('cart-items');
+    cartItemsContainer.innerHTML = ''; // Clear existing items
+
+    let total = 0;
+    cart.forEach(item => {
+        let itemElement = document.createElement('div');
+        itemElement.classList.add('cart-item');
+        itemElement.innerHTML = `
+            <p>${item.name}</p>
+            <p>${item.price} تومان</p>
+            <p>تعداد: ${item.quantity}</p>
+        `;
+        cartItemsContainer.appendChild(itemElement);
+        total += item.price * item.quantity;
+    });
+
+    // نمایش قیمت کل
+    let totalElement = document.getElementById('total-price');
+    totalElement.innerText = `مجموع: ${total} تومان`;
+}

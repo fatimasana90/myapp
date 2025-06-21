@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>سفارش‌های من</h2>
+    {% if orders %}
+    <table class="table table-bordered text-center mt-4">
+        <thead class="table-light">
+            <tr>
+                <th>کد سفارش</th>
+                <th>مبلغ کل</th>
+                <th>تاریخ</th>
+                <th>وضعیت</th>
+                <th>جزئیات</th>  {# ستونی برای مشاهده جزئیات اضافه شد #}
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.total_price | int }} تومان</td>
+                <td>{{ order.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>{{ order.status }}</td>
+                <td>
+                    <a href="{{ url_for('order_detail', order_id=order.id) }}" class="btn btn-sm btn-info">مشاهده</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>شما هنوز سفارشی ثبت نکرده‌اید.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

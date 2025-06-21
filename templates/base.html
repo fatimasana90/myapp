@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}برآلین{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Manifest (PWA) -->
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}" />
+
+  <!-- استایل‌ها -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+
+
+  {% block head_extra %}{% endblock %}
+
+<style>
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: white;
+    z-index: 1050;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar.show {
+    right: 0;
+  }
+
+  #overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+  }
+
+  #overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+</style>
+
+</head>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+
+  if (menuToggle && sidebar && overlay) {
+    menuToggle.addEventListener("click", function () {
+      menuToggle.classList.toggle("active");
+      sidebar.classList.toggle("show");
+      overlay.classList.toggle("show");
+    });
+
+    overlay.addEventListener("click", function () {
+      menuToggle.classList.remove("active");
+      sidebar.classList.remove("show");
+      overlay.classList.remove("show");
+    });
+  }
+});
+</script>
+
+
+<body class="bg-light">
+
+  <!-- 🔹 Header -->
+  <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm sticky-top">
+    <div class="d-flex align-items-center gap-3">
+      <div id="menuToggle" class="menu-toggle" style="cursor: pointer;">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <a href="https://www.beralinco.com" target="_blank" class="fw-bold text-decoration-none text-dark">سایت اصلی</a>
+    </div>
+
+    <div class="flex-grow-1 mx-3">
+      <input type="text" class="form-control" placeholder="جستجو کنید..." />
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <div class="cart-icon fs-4">
+        🛒 <span id="cart-count" class="text-danger fw-bold">0</span>
+      </div>
+      {% if current_user.is_authenticated %}
+        <span>خوش آمدید {{ current_user.email }}</span>
+        <a href="{{ url_for('main.logout') }}" class="btn btn-outline-danger btn-sm">خروج</a>
+      {% else %}
+        <a href="{{ url_for('main.login') }}" class="btn btn-outline-primary btn-sm">ورود</a>
+        <a href="{{ url_for('main.register') }}" class="btn btn-outline-success btn-sm">ثبت‌نام</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- 🔹 Sidebar -->
+  <nav class="sidebar shadow-sm" id="sidebar">
+    <ul class="list-unstyled p-3">
+      <li><a href="{{ url_for('main.account') }}" class="d-block py-2">حساب من</a></li>
+      <li><a href="{{ url_for('main.favorites') }}" class="d-block py-2">علاقمندی‌ها</a></li>
+      <li><a href="{{ url_for('main.order_history') }}" class="d-block py-2">تاریخچه سفارشات</a></li>
+      <li><a href="https://beralinco.com/چک-های-من/" target="_blank" class="d-block py-2">چک‌های من</a></li>
+      <li><a href="https://beralinco.com/درباره-ما/" target="_blank" class="d-block py-2">درباره ما</a></li>
+      <li><a href="https://beralinco.com/تماس-با-ما/" target="_blank" class="d-block py-2">تماس با ما</a></li>
+      <li><a href="{{ url_for('main.logout') }}" class="d-block py-2 text-danger">خروج</a></li>
+      <li><a href="{{ url_for('main.cart') }}" class="d-block py-2">🛒 مشاهده سبد خرید (<span id="sidebar-cart-count">0</span>)</a></li>
+    </ul>
+  </nav>
+
+  <!-- 🔹 Overlay -->
+  <div id="overlay"></div>
+
+  <!-- 🔹 Main Content -->
+  <main class="container my-4">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- 🔹 Footer -->
+  <footer class="bg-white text-center py-3 shadow-sm mt-5">
+    &copy; ۲۰۲۵ برآلین | تمامی حقوق محفوظ است.
+  </footer>
+
+  <!-- 🔹 Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
+
+
+
+
+
+
+
+

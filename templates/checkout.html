@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="mb-4 text-center">بررسی سفارش</h2>
+
+    <!-- نمایش پیام‌های فلش -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div>
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'error' or category == 'danger' else category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% if cart %}
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>نام محصول</th>
+                    <th>تعداد</th>
+                    <th>قیمت واحد</th>
+                    <th>جمع</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.values() %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ "{:,.0f}".format(item.price) }} تومان</td>
+                    <td>{{ "{:,.0f}".format(item.price * item.quantity) }} تومان</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <p class="text-end fw-bold fs-5">💰 مبلغ کل: {{ "{:,.0f}".format(total) }} تومان</p>
+
+    <h4 class="mt-4 mb-3">مشخصات خریدار</h4>
+
+    <form method="post" action="{{ url_for('main.checkout') }}">
+        <div class="mb-3">
+            <label for="name" class="form-label">نام کامل <span class="text-danger">*</span></label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="مثلاً: علی رضایی"
+                   value="{{ form_data.name if form_data.name else '' }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label">آدرس <span class="text-danger">*</span></label>
+            <textarea id="address" name="address" class="form-control" rows="3" placeholder="آدرس کامل خود را وارد کنید" required>{{ form_data.address if form_data.address else '' }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">ایمیل (اختیاری)</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="example@example.com"
+                   value="{{ form_data.email if form_data.email else '' }}">
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">✅ تأیید و ثبت سفارش</button>
+    </form>
+    {% else %}
+    <div class="alert alert-info text-center">سبد خرید شما خالی است.</div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+

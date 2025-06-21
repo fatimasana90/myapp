@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>حساب من</title>
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            direction: rtl;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px #ccc;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #ffcc00;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .balance {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h2>تاریخچه حساب من</h2>
+
+    {% if records and records|length > 0 %}
+    <table>
+        <thead>
+            <tr>
+                <th>تاریخ</th>
+                <th>بدهکار</th>
+                <th>بستانکار</th>
+                <th>مانده</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.date }}</td>
+                <td>{{ record.debit if record.debit else '-' }}</td>
+                <td>{{ record.credit if record.credit else '-' }}</td>
+                <td class="balance">{{ record.balance }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="text-align: center; color: #777;">هیچ تراکنشی برای نمایش وجود ندارد.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>تاریخچه سفارشات</title>
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            direction: rtl;
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 95%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 14px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        th {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .status {
+            font-weight: bold;
+            color: #17a2b8;
+        }
+
+        .details-link {
+            text-decoration: none;
+            background-color: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .details-link:hover {
+            background-color: #218838;
+        }
+
+        .no-orders {
+            text-align: center;
+            color: #777;
+            font-size: 18px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>تاریخچه سفارشات شما</h2>
+
+    {% if orders %}
+    <table>
+        <thead>
+            <tr>
+                <th>شناسه سفارش</th>
+                <th>تاریخ</th>
+                <th>مبلغ کل</th>
+                <th>وضعیت</th>
+                <th>جزئیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ "{:,.0f}".format(order.total_price) }} تومان</td>
+                <td class="status">{{ order.status }}</td>
+                <td>
+                    <a href="{{ url_for('main.order_detail', order_id=order.id) }}" class="details-link">مشاهده</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="no-orders">هنوز سفارشی ثبت نکرده‌اید.</p>
+    {% endif %}
+
+</body>
+</html>
+
+

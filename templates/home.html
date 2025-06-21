@@ -1,0 +1,21 @@
+<section class="latest-products">
+    <h2>جدیدترین محصولات</h2>
+    <div class="product-grid">
+        {% for product in products %}
+            <div class="product-item">
+                <img src="{% if product.image_url %}{{ product.image_url }}{% else %}{{ url_for('static', filename='images/sample1.jpg') }}{% endif %}" 
+                     alt="{{ product.name }}">
+                <p>{{ product.name }}</p>
+                <p>{{ product.price }} تومان</p>
+                <a href="#" class="add-to-cart-btn"
+                   data-id="{{ product.id }}"
+                   data-name="{{ product.name }}"
+                   data-price="{{ product.price }}">
+                   🛒 افزودن به سبد خرید
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+

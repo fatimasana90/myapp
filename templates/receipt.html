@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="text-center mb-4">
+        <h2>🧾 رسید سفارش</h2>
+        <p class="text-muted">سفارش شماره {{ order.id }} | تاریخ: {{ order.created_at.strftime('%Y-%m-%d') }}</p>
+    </div>
+
+    <div class="mb-4">
+        <p><strong>مشتری:</strong> {{ order.customer_name }}</p>
+        {% if order.address %}<p><strong>آدرس:</strong> {{ order.address }}</p>{% endif %}
+        {% if order.email %}<p><strong>ایمیل:</strong> {{ order.email }}</p>{% endif %}
+        <p><strong>وضعیت:</strong> {{ order.status }}</p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>نام محصول</th>
+                    <th>تعداد</th>
+                    <th>قیمت واحد</th>
+                    <th>جمع</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ "{:,.0f}".format(item.price) }} تومان</td>
+                    <td>{{ "{:,.0f}".format(item.price * item.quantity) }} تومان</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-end fw-bold fs-5">
+        💳 مبلغ نهایی پرداختی: {{ "{:,.0f}".format(order.total_price) }} تومان
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('main.order_history') }}" class="btn btn-primary">🗂 مشاهده سفارش‌های من</a>
+    </div>
+</div>
+{% endblock %}

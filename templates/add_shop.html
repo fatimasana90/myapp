@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>لیست کافه و رستوران</title>
+</head>
+<body>
+    <h1>لیست کافه و رستوران</h1>
+    <ul>
+        {% for shop in shops %}
+            <li>{{ shop.name }} - {{ shop.address }} - {{ shop.status }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('add_shop') }}">افزودن کافه و رستوران جدید</a>
+</body>
+</html>
+
+
